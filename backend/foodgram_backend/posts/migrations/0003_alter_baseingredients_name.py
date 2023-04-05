@@ -4,15 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('posts', '0002_alter_favorite_subscribed_recipe_and_more'),
+        ("posts", "0002_alter_favorite_subscribed_recipe_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='baseingredients',
-            name='name',
-            field=models.CharField(max_length=64, unique=True, verbose_name='Название продукта'),
+            model_name="baseingredients",
+            name="name",
+            field=models.CharField(
+                max_length=64, unique=True, verbose_name="Название продукта"
+            ),
         ),
     ]

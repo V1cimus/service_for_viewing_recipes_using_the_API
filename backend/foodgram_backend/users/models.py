@@ -6,12 +6,12 @@ class User(AbstractUser):
     first_name = models.CharField(
         max_length=150,
         null=False,
-        verbose_name='Имя',
+        verbose_name="Имя",
     )
     last_name = models.CharField(
         max_length=150,
         null=False,
-        verbose_name='Фамилия',
+        verbose_name="Фамилия",
     )
     email = models.EmailField(
         unique=True,
@@ -19,7 +19,8 @@ class User(AbstractUser):
         verbose_name="Email",
     )
     is_user_ban = models.BooleanField(
-        default=False, verbose_name="Заблокировать",
+        default=False,
+        verbose_name="Заблокировать",
     )
 
     class Meta:
@@ -39,24 +40,24 @@ class SubscribAuthor(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='subscriber',
-        verbose_name='Пользователь',
+        related_name="subscriber",
+        verbose_name="Пользователь",
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='subscribing',
-        verbose_name='Автор',
+        related_name="subscribing",
+        verbose_name="Автор",
     )
 
     class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
         constraints = [
             models.UniqueConstraint(
-                fields=('user', 'author'), name='unique_subscrib'
+                fields=("user", "author"), name="unique_subscrib"
             )
         ]
 
     def __str__(self):
-        return f'{self.user} -> {self.author}'
+        return f"{self.user} -> {self.author}"

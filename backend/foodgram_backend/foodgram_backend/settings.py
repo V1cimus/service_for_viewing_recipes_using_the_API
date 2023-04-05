@@ -8,9 +8,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'django-insecure--vztlg$$te7_urbg$wm)4ard8fznt6^ehhnkgivo0vyvhi&h)g'
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://158.160.61.84',
+    'http://127.0.0.1',
+    'https://158.160.61.84',
+    'https://127.0.0.1',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -98,11 +105,11 @@ REST_FRAMEWORK = {
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
+
+USE_L10N = True
 
 USE_I18N = True
 
@@ -118,8 +125,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "users.User"
-
-EMAIL_BACKEND_NAME = "mymail@footgram.ru"
 
 DJOSER = {
     'LOGIN_FIELD': 'email',

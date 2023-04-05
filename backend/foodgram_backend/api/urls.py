@@ -6,7 +6,7 @@ from .views import (
     GetAuthorSubViewSet,
     AuthorSubscriptionViewSet,
     AddInFavoriteShoppingViewSet,
-    RecipeViewSet
+    RecipeViewSet,
 )
 
 v1_router = DefaultRouter()
@@ -14,23 +14,23 @@ v1_router.register(
     "users/subscriptions",
     GetAuthorSubViewSet,
     basename="subscriptions",
-    )
+)
 v1_router.register(
-    r"users/(?P<user_id>\d+)/subscriptions",
+    r"users/(?P<user_id>\d+)/subscribe",
     AuthorSubscriptionViewSet,
-    basename="subscriptions",
-    )
+    basename="subscribe",
+)
 v1_router.register("recipes", RecipeViewSet)
 v1_router.register(
     r"recipes/(?P<recipe_id>\d+)/favorite",
     AddInFavoriteShoppingViewSet,
     basename="favorite",
-    )
+)
 v1_router.register(
     r"recipes/(?P<recipe_id>\d+)/shopping_cart",
     AddInFavoriteShoppingViewSet,
     basename="shopping_cart",
-    )
+)
 v1_router.register("tags", TagViewSet)
 v1_router.register(
     "ingredients",

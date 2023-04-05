@@ -4,18 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0003_remove_user_is_subscribed'),
+        ("users", "0003_remove_user_is_subscribed"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='subscribauthor',
-            name='unique appversion',
+            model_name="subscribauthor",
+            name="unique appversion",
         ),
         migrations.AddConstraint(
-            model_name='subscribauthor',
-            constraint=models.UniqueConstraint(fields=('user', 'author'), name='unique_subscrib'),
+            model_name="subscribauthor",
+            constraint=models.UniqueConstraint(
+                fields=("user", "author"), name="unique_subscrib"
+            ),
         ),
     ]

@@ -1,7 +1,13 @@
 from django.contrib import admin
 
 from .models import (
-    Recipe, Tag, Ingredients, BaseIngredients, Unit, Favorite, ShoppingList
+    Recipe,
+    Tag,
+    Ingredients,
+    BaseIngredients,
+    Unit,
+    Favorite,
+    ShoppingList,
 )
 
 
@@ -12,7 +18,11 @@ class RecipeAdmin(admin.ModelAdmin):
         "name",
         "get_favorites_count",
     )
-    list_filter = ("author", "name", "tags",)
+    list_filter = (
+        "author",
+        "name",
+        "tags",
+    )
     filter_horizontal = ("tags", "ingredients")
     empty_value_display = "---пусто---"
 

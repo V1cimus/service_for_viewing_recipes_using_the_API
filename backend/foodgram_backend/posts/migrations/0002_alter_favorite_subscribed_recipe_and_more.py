@@ -6,31 +6,50 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('posts', '0001_initial'),
+        ("posts", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='favorite',
-            name='subscribed_recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_subscribed_recipe', to='posts.recipe', verbose_name='Автор'),
+            model_name="favorite",
+            name="subscribed_recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_subscribed_recipe",
+                to="posts.recipe",
+                verbose_name="Автор",
+            ),
         ),
         migrations.AlterField(
-            model_name='favorite',
-            name='subscriber',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_subscriber', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="favorite",
+            name="subscriber",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_subscriber",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
         migrations.AlterField(
-            model_name='shoppinglist',
-            name='subscribed_recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_subscribed_recipe', to='posts.recipe', verbose_name='Автор'),
+            model_name="shoppinglist",
+            name="subscribed_recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_subscribed_recipe",
+                to="posts.recipe",
+                verbose_name="Автор",
+            ),
         ),
         migrations.AlterField(
-            model_name='shoppinglist',
-            name='subscriber',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_subscriber', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="shoppinglist",
+            name="subscriber",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="%(class)s_subscriber",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
     ]
