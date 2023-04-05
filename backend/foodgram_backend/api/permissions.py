@@ -26,3 +26,18 @@ class AuthorPermission(permissions.BasePermission):
             request.method in permissions.SAFE_METHODS
             or obj.author == request.user
         )
+
+
+class IsAdminOrReadOnlyPermission(permissions.BasePermission):
+    """
+    Проверяет, является ли пользователь автором объекта.
+    """
+
+    message = "Доступно только автору!"
+
+    def has_object_permission(self, request, view, obj):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or self.is_staff
+            or self.is_superuser
+        )

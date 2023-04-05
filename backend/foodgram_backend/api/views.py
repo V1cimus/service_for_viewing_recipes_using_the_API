@@ -24,7 +24,9 @@ from users.models import SubscribAuthor
 from .viewsets import GetAuthorSubViewSet, CreateAndDectroyViewSet
 from .filter import RecipeFilter
 from .util import start_download_shopping_cart
-from .permissions import IsNotBanPermission, AuthorPermission
+from .permissions import (
+    IsNotBanPermission, AuthorPermission, IsAdminOrReadOnlyPermission,
+)
 
 
 User = get_user_model()
@@ -34,7 +36,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """
     ViewSet для просмотра списка тегов.
     """
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrReadOnlyPermission,)
     pagination_class = None
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
@@ -46,7 +48,7 @@ class BaseIngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     Поддерживает фильтрацию по названию ингредиента.
     """
 
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrReadOnlyPermission,)
     pagination_class = None
     serializer_class = BaseIngredientsSerializer
 
