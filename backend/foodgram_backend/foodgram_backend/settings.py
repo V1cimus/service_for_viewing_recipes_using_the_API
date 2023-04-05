@@ -12,12 +12,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://158.160.61.84',
-    'http://127.0.0.1',
-    'https://158.160.61.84',
-    'https://127.0.0.1',
-]
+CSRF_TRUSTED_ORIGINS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
