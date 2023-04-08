@@ -1,7 +1,7 @@
 # FoodGram, размести свои рецепты здесь! (praktikum_diplom)
 
 ![example workflow](https://github.com/V1cimus/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
-![pre-commit](https://img.shields.io/github/workflow/status/V1cimus/foodgram-project-react/pre-commit?label=pre-commit)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/V1cimus/foodgram-project-react)
 
 ## Описание
 Проект предназначен для Публикации рецептов. Кроме того вы можете добавлять рецепты в избранное, фильтровать их то тегам, подписываться на авторов и формировать собственный список покупок на основании рецептов добавленых в него. 
