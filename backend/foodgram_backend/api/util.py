@@ -60,7 +60,7 @@ def create_table(pdf, data=None):
             ]
         )
     )
-    y_table = COORD_Y_TITLE - len(data) * (2 * SIZE_TEXT)
+    y_table = COORD_Y_TITLE - (len(data) + 1) * SIZE_TEXT
     table.wrapOn(pdf, START_X_COORD, START_Y_COORD)
     table.drawOn(pdf, COORD_X_TABLE, y_table)
     bottom_coord_table = (COORD_X_TABLE, y_table)

@@ -1,7 +1,14 @@
 # FoodGram, размести свои рецепты здесь! (praktikum_diplom)
 
 ![example workflow](https://github.com/V1cimus/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/V1cimus/foodgram-project-react)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/V1cimus/foodgram-project-react/master)](https://results.pre-commit.ci/latest/github/V1cimus/foodgram-project-react/master)
+
+## pre-commit
+
+A framework for managing and maintaining multi-language pre-commit hooks.
+
+For more information see: https://pre-commit.com/
 
 ## Описание
 Проект предназначен для Публикации рецептов. Кроме того вы можете добавлять рецепты в избранное, фильтровать их то тегам, подписываться на авторов и формировать собственный список покупок на основании рецептов добавленых в него. 
