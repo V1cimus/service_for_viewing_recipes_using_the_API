@@ -30,14 +30,16 @@ class AuthorPermission(permissions.BasePermission):
 
 class IsAdminOrReadOnlyPermission(permissions.BasePermission):
     """
-    Проверяет, является ли пользователь автором объекта.
+    Проверяет, имеет ли пользователь права администратора
+    или же разрешено только чтение.
     """
 
-    message = "Доступно только автору!"
+    message = (
+        "Доступ разрешен только для администратора или только для чтения."
+    )
 
-    def has_object_permission(self, request, view, obj):
+    def has_permission(self, request, view):
         return (
             request.method in permissions.SAFE_METHODS
-            or self.is_staff
-            or self.is_superuser
+            or self.is_admin
         )

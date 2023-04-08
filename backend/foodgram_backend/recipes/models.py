@@ -1,36 +1,18 @@
-from django.contrib.auth import get_user_model
-from django.db import models
-from django.core.validators import MinValueValidator
 from colorfield.fields import ColorField
-
+from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
+from django.db import models
 
 User = get_user_model()
 
 
-class Unit(models.Model):
+class BaseIngredient(models.Model):
     name = models.CharField(
-        max_length=32,
-        verbose_name="Единица измерения",
-    )
-
-    class Meta:
-        verbose_name = "Единица измерения"
-        verbose_name_plural = "Единицы измерения"
-        ordering = ("name",)
-
-    def __str__(self):
-        return self.name
-
-
-class BaseIngredients(models.Model):
-    name = models.CharField(
-        unique=True,
         max_length=64,
         verbose_name="Название продукта",
     )
-    measurement_unit = models.ForeignKey(
-        Unit,
-        on_delete=models.CASCADE,
+    measurement_unit = models.CharField(
+        max_length=32,
         verbose_name="Единица измерения",
     )
 
@@ -43,19 +25,19 @@ class BaseIngredients(models.Model):
         return self.name
 
 
-class Ingredients(models.Model):
-    ingredients = models.ForeignKey(
-        BaseIngredients,
+class Ingredient(models.Model):
+    ingredient = models.ForeignKey(
+        BaseIngredient,
         on_delete=models.CASCADE,
-        related_name="ingredients",
+        related_name="ingredient",
         verbose_name="Название продукта",
     )
     amount = models.IntegerField(
         verbose_name="Количество продукта",
-        validators=[
+        validators=(
             MinValueValidator(1),
-        ],
-        null=True,
+        ),
+        default=1
     )
     to_recipe = models.ForeignKey(
         "Recipe",
@@ -69,10 +51,10 @@ class Ingredients(models.Model):
     class Meta:
         verbose_name = "Ингредиент"
         verbose_name_plural = "Ингредиенты"
-        ordering = ("ingredients",)
+        ordering = ("ingredient",)
 
     def __str__(self):
-        return f"{self.ingredients.name} - {self.amount}"
+        return f"{self.ingredient.name} - {self.amount}"
 
 
 class Tag(models.Model):
@@ -118,7 +100,7 @@ class Recipe(models.Model):
         verbose_name="Описание рецепта",
     )
     ingredients = models.ManyToManyField(
-        Ingredients,
+        BaseIngredient,
         verbose_name="Ингредиенты",
     )
     tags = models.ManyToManyField(
@@ -145,40 +127,57 @@ class Recipe(models.Model):
         return self.name
 
 
-class BaseAddRecipe(models.Model):
+class Favorite(models.Model):
     subscriber = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name="Пользователь",
-        related_name="%(class)s_subscriber",
+        related_name="favorite_subscriber",
     )
     subscribed_recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        verbose_name="Автор",
-        related_name="%(class)s_subscribed_recipe",
+        verbose_name="Рецепт",
+        related_name="favorite_subscribed_recipe",
     )
 
     class Meta:
-        abstract = True
+        verbose_name = "Избранный рецет"
+        verbose_name_plural = "Избранные рецеты"
         constraints = [
             models.UniqueConstraint(
                 fields=("subscriber", "subscribed_recipe"),
-                name="unique appversion %(class)s",
+                name="unique appversion favorite",
             )
         ]
 
     def __str__(self):
-        return f"{self.subscriber} -> {self.subscribed_recipe}"
+        return f"{self.subscriber_id} -> {self.subscribed_recipe_id}"
 
 
-class Favorite(BaseAddRecipe):
-    class Meta(BaseAddRecipe.Meta):
-        verbose_name = "Подписка на рецепт"
-        verbose_name_plural = "Подписки на рецепты"
+class ShoppingList(models.Model):
+    subscriber = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="shoppinglist_subscriber",
+    )
+    subscribed_recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name="Рецепт",
+        related_name="shoppinglist_subscribed_recipe",
+    )
 
-
-class ShoppingList(BaseAddRecipe):
-    class Meta(BaseAddRecipe.Meta):
+    class Meta:
         verbose_name = "Список покупок"
         verbose_name_plural = "Списки покупок"
+        constraints = [
+            models.UniqueConstraint(
+                fields=("subscriber", "subscribed_recipe"),
+                name="unique appversion shoppinglist",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.subscriber_id} -> {self.subscribed_recipe_id}"

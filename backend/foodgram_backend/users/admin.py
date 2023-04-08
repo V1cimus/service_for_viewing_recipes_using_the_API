@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from .models import User, SubscribAuthor
+from .models import Subscription
+
+User = get_user_model()
 
 
 @admin.register(User)
@@ -22,4 +25,4 @@ class CommentAdmin(admin.ModelAdmin):
     empty_value_display = "---пусто---"
 
 
-admin.site.register(SubscribAuthor)
+admin.site.register(Subscription)

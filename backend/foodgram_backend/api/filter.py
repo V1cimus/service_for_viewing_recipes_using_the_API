@@ -1,7 +1,6 @@
 from django_filters import rest_framework
-from rest_framework.exceptions import NotAuthenticated
 
-from posts.models import Recipe, Tag
+from recipes.models import Recipe, Tag
 
 
 class RecipeFilter(rest_framework.FilterSet):
@@ -21,12 +20,11 @@ class RecipeFilter(rest_framework.FilterSet):
         model = Recipe
         fields = (
             "tags",
-            "author",
+            "is_favorited",
+            "is_in_shopping_cart",
         )
 
     def filter_is_favorite(self, queryset, name, value):
-        if self.request.user.is_anonymous:
-            raise NotAuthenticated
         if value:
             return queryset.filter(
                 favorite_subscribed_recipe__subscriber=self.request.user
@@ -34,8 +32,6 @@ class RecipeFilter(rest_framework.FilterSet):
         return queryset
 
     def filter_is_shopping_card(self, queryset, name, value):
-        if self.request.user.is_anonymous:
-            raise NotAuthenticated
         if value:
             return queryset.filter(
                 shoppinglist_subscribed_recipe__subscriber=self.request.user

@@ -1,0 +1,23 @@
+[tool.ruff]
+line-length = 80
+select = ["E", "F", "I"]
+exclude = [
+    ".git",
+    ".ruff_cache",
+    ".venv",
+    ".env",
+    "frontend",
+    "venv",
+    "env",
+    "migrations",
+    "infra",
+    "docs",
+    ".vscode"
+]
+
+[tool.ruff.per-file-ignores]
+"*/settings.py" = ["E501"]
+
+[tool.ruff.isort]
+combine-as-imports = true
+known-local-folder = ["recipes", "users", "api"]

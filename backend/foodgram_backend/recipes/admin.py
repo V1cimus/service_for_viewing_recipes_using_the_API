@@ -1,13 +1,12 @@
 from django.contrib import admin
 
 from .models import (
-    Recipe,
-    Tag,
-    Ingredients,
-    BaseIngredients,
-    Unit,
+    BaseIngredient,
     Favorite,
+    Ingredient,
+    Recipe,
     ShoppingList,
+    Tag,
 )
 
 
@@ -30,8 +29,8 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.favorite_subscribed_recipe.count()
 
 
-@admin.register(BaseIngredients)
-class BaseIngredientsAdmin(admin.ModelAdmin):
+@admin.register(BaseIngredient)
+class BaseIngredientAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "measurement_unit",
@@ -53,6 +52,5 @@ class TagAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Favorite)
-admin.site.register(Ingredients)
-admin.site.register(Unit)
+admin.site.register(Ingredient)
 admin.site.register(ShoppingList)

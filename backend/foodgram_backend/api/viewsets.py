@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins, generics
+from rest_framework import generics, mixins, viewsets
 
 
 class GetAuthorSubViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -8,8 +8,6 @@ class GetAuthorSubViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     на кого подписан автор.
     """
 
-    pass
-
 
 class CreateAndDectroyViewSet(generics.DestroyAPIView,
                               mixins.CreateModelMixin,
@@ -18,5 +16,3 @@ class CreateAndDectroyViewSet(generics.DestroyAPIView,
     ViewSet для создания и удаления объектов.
     Поддерживает методы POST и DELETE.
     """
-
-    pass
