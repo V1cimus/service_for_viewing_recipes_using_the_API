@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db.models import F, Sum
+from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
+from query_counter.decorators import queries_counter
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
@@ -33,6 +35,7 @@ from users.models import Subscription
 User = get_user_model()
 
 
+@method_decorator(queries_counter, name='dispatch')
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """
     ViewSet для просмотра списка тегов.
@@ -43,6 +46,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TagSerializer
 
 
+@method_decorator(queries_counter, name='dispatch')
 class BaseIngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Базовый ViewSet для просмотра списка ингредиентов.
@@ -59,10 +63,19 @@ class BaseIngredientsViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = BaseIngredient.objects.all()
         name = self.request.query_params.get("name")
         if name:
-            queryset = queryset.filter(name__istartswith=name.lower())
+            start_queryset = list(
+                queryset.filter(name__istartswith=name.lower())
+                )
+            all_queryset = list(queryset.filter(name__icontains=name.lower()))
+            for ingredient in all_queryset:
+                if ingredient in start_queryset:
+                    continue
+                start_queryset.append(ingredient)
+            queryset = start_queryset
         return queryset
 
 
+@method_decorator(queries_counter, name='dispatch')
 class GetAuthorSubscriptionViewSet(GetAuthorSubViewSet):
     """
     ViewSet для просмотра подписок пользователя на авторов.
@@ -76,6 +89,7 @@ class GetAuthorSubscriptionViewSet(GetAuthorSubViewSet):
         return Subscription.objects.filter(user=self.request.user)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class AuthorSubscriptionViewSet(CreateAndDectroyViewSet):
     """
     ViewSet для создания и удаления подписки пользователя на автора.
@@ -96,6 +110,7 @@ class AuthorSubscriptionViewSet(CreateAndDectroyViewSet):
         return Subscription.objects.filter(user=self.request.user)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class RecipeViewSet(viewsets.ModelViewSet):
     """
     ViewSet для модели создания, просмотра,
@@ -177,6 +192,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         user = request.user
+        if not user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         ingredients_list = (
             Ingredient.objects.prefetch_related("ingredient").filter(
                 to_recipe__shoppinglist_subscribed_recipe__subscriber=user

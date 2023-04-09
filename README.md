@@ -2,13 +2,6 @@
 
 ![example workflow](https://github.com/V1cimus/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/V1cimus/foodgram-project-react/master)](https://results.pre-commit.ci/latest/github/V1cimus/foodgram-project-react/master)
-
-## pre-commit
-
-A framework for managing and maintaining multi-language pre-commit hooks.
-
-For more information see: https://pre-commit.com/
 
 ## Описание
 Проект предназначен для Публикации рецептов. Кроме того вы можете добавлять рецепты в избранное, фильтровать их то тегам, подписываться на авторов и формировать собственный список покупок на основании рецептов добавленых в него. 
@@ -37,9 +30,17 @@ docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py collectstatic --no-input
 ```
 
+Выполните команду для загрузки локализации, поддерживается русский и английский языки.
+
+```bash
+sudo docker-compose exec -T web python manage.py compilemessages
+```
+
 Проект развернут и готов к работе!
 
-Для получения информации о доступных командах перейдите в документацию к API по ссылке http://127.0.0.1/api/docs/.
+Для получения информации о доступных командах перейдите в документацию к API по ссылке: 
+- Docs: http://127.0.0.1/api/docs/;
+- Swagger: http://127.0.0.1/swagger/.
 
 
 ## Остановка проекта

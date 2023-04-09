@@ -8,38 +8,41 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "django-insecure--vztlg$$te7_urbg$wm)4ard8fznt6^ehhnkgivo0vyvhi&h)g"
 
-DEBUG = (os.getenv("DEBUGE", default=False),)
+DEBUG = bool(os.getenv("DEBUG", default=False))
 
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = ["http://*"]
 
-DJANGO_APPS = [
+DJANGO_APPS = (
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-]
+)
 
-THIRD_PARTY_APPS = [
+THIRD_PARTY_APPS = (
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_swagger",
     "django_filters",
     "colorfield",
     "djoser",
-]
+    'query_counter',
+    "drf_yasg",
+)
 
-LOCAL_APPS = [
+LOCAL_APPS = (
     "users",
     "recipes",
     "api",
-]
+)
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-MIDDLEWARE = [
+MIDDLEWARE = (
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -47,7 +50,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
+    'query_counter.middleware.DjangoQueryCounterMiddleware',
+)
 
 ROOT_URLCONF = "foodgram_backend.urls"
 
@@ -63,6 +67,9 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "libraries": {
+                "staticfiles": "django.templatetags.static",
+            },
         },
     },
 ]
@@ -102,6 +109,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 6,
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
@@ -140,11 +148,18 @@ DJOSER = {
         "current_user": "api.serializers.UserSerializer",
     },
     "PERMISSIONS": {
-        "user": [
+        "user": (
             "djoser.permissions.CurrentUserOrAdminOrReadOnly",
-        ],
-        "user_list": [
+        ),
+        "user_list": (
             "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-        ],
+        ),
     },
 }
+
+LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
+
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+)
