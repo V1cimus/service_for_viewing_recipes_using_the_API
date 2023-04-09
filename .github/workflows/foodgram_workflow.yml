@@ -55,7 +55,12 @@ jobs:
         key: ${{ secrets.SSH_KEY }} 
         passphrase: ${{ secrets.PASSPHRASE }} 
         script: | 
-          make all 
+          make rm_web
+          make env
+          make up
+          make migrate
+          make collectstatic
+          make localisation
           
   send_message_git:
     runs-on: ubuntu-latest
