@@ -6,7 +6,7 @@ services:
     volumes:
       - db_postgresql_value:/var/lib/postgresql/data/
     env_file:
-      - ../backend/.env
+      - ./.env
 
   web:
     image: vicimus/foodgram_backend
