@@ -429,7 +429,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(
         many=True,
     )
-    image = Base64ImageField()
+    image = Base64ImageField(max_length=None)
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
 
