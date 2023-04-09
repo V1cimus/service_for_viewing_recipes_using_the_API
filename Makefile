@@ -1,8 +1,9 @@
 DOCKER_COMPOSE_DIR := infra/
+export DOCKER_USERNAME := $(shell sed 'DOCKER_USERNAME=' .env)
 
 up:
 	cd $(DOCKER_COMPOSE_DIR) && \
-	sudo docker pull ${ secrets.DOCKER_USERNAME }/foodgram_backend:latest && \
+	sudo docker pull $(DOCKER_USERNAME)/foodgram_backend:latest && \
 	sudo docker-compose up -d && \
 	sudo docker image prune -f
 
@@ -14,21 +15,10 @@ clean:
 	cd $(DOCKER_COMPOSE_DIR) && \
 	sudo docker-compose down --rmi all --volumes --remove-orphans
 
-env:
-	cd $(DOCKER_COMPOSE_DIR) && \
-	touch .env && \
-	echo DB_ENGINE=${ secrets.DB_ENGINE } > .env && \
-	echo DB_NAME=${ secrets.DB_NAME } >> .env && \
-	echo POSTGRES_USER=${ secrets.POSTGRES_USER } >> .env && \
-	echo POSTGRES_PASSWORD=${ secrets.POSTGRES_PASSWORD } >> .env && \
-	echo DB_HOST=${ secrets.DB_HOST } >> .env && \
-	echo DB_PORT=${ secrets.DB_PORT } >> .env && \
-	echo DEBUG=${ secrets.DEBUG } >> .env
-
 rm_web:
 	cd $(DOCKER_COMPOSE_DIR) && \
 	sudo docker-compose stop && \
-	sudo docker image rm ${ secrets.DOCKER_USERNAME }/foodgram_backend
+	sudo docker image rm $(DOCKER_USERNAME)/foodgram_backend
 
 migrate:
 	cd $(DOCKER_COMPOSE_DIR) && \
