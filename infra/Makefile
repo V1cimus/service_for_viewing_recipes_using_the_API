@@ -1,7 +1,7 @@
-export DOCKER_USERNAME := $(shell sed 's/^DOCKER_USERNAME=//g' .env)
+include .env
 
 up:
-	sudo docker pull $(DOCKER_USERNAME)/foodgram_backend:latest && \
+	sudo docker pull ${DOCKER_USERNAME}/foodgram_backend:latest && \
 	sudo docker-compose up -d && \
 	sudo docker image prune -f
 
@@ -13,7 +13,7 @@ clean:
 
 rm_web:
 	sudo docker-compose stop && \
-	sudo docker image rm $(DOCKER_USERNAME)/foodgram_backend
+	sudo docker image rm ${DOCKER_USERNAME}/foodgram_backend
 
 migrate:
 	sudo docker-compose exec -T web python manage.py migrate
