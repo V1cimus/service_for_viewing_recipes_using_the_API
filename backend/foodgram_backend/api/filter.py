@@ -1,6 +1,9 @@
+from django.contrib.auth import get_user_model
 from django_filters import rest_framework
 
 from recipes.models import Recipe, Tag
+
+User = get_user_model()
 
 
 class RecipeFilter(rest_framework.FilterSet):
@@ -8,6 +11,11 @@ class RecipeFilter(rest_framework.FilterSet):
         field_name="tags__slug",
         to_field_name="slug",
         queryset=Tag.objects.all(),
+    )
+    author = rest_framework.filters.ModelMultipleChoiceFilter(
+        field_name="id",
+        to_field_name="id",
+        queryset=User.objects.all(),
     )
     is_favorited = rest_framework.filters.NumberFilter(
         method="filter_is_favorite",
