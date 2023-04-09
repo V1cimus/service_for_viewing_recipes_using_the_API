@@ -33,8 +33,8 @@ env:
 	echo DB_PORT=${{ secrets.DEBUG }} >> .env
 
 rm_web:
-	sudo docker-compose stop 
-	sudo docker-compose rm web 
+	cd $(DOCKER_COMPOSE_DIR) $$ sudo docker-compose stop 
+	cd $(DOCKER_COMPOSE_DIR) $$ sudo docker-compose rm web 
 
 migrate:
 	sudo docker-compose exec -T web python manage.py migrate
