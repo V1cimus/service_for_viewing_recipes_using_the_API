@@ -1,14 +1,5 @@
 DOCKER_COMPOSE_DIR := infra/
 
-all: 
-	cd $(DOCKER_COMPOSE_DIR)
-	rm_web
-	env
-	up
-	migrate
-	collectstatic
-	localisation
-
 up:
 	sudo docker pull ${{ secrets.DOCKER_USERNAME }}/api_yamdb:latest
 	sudo docker-compose up -d
@@ -23,6 +14,7 @@ clean:
 	sudo docker-compose down --rmi all --volumes --remove-orphans
 
 env:
+	cd $(DOCKER_COMPOSE_DIR)
 	touch .env 
 	echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env 
 	echo DB_NAME=${{ secrets.DB_NAME }} >> .env 
@@ -33,14 +25,18 @@ env:
 	echo DB_PORT=${{ secrets.DEBUG }} >> .env
 
 rm_web:
-	cd $(DOCKER_COMPOSE_DIR) $$ sudo docker-compose stop 
-	cd $(DOCKER_COMPOSE_DIR) $$ sudo docker-compose rm web 
+	cd $(DOCKER_COMPOSE_DIR)
+	sudo docker-compose stop 
+	sudo docker image rm vicimus/foodgram_backend
 
 migrate:
+	cd $(DOCKER_COMPOSE_DIR)
 	sudo docker-compose exec -T web python manage.py migrate
     
 collectstatic:
+	cd $(DOCKER_COMPOSE_DIR)
 	sudo docker-compose exec -T web python manage.py collectstatic --no-input
 
 localisation:
+	cd $(DOCKER_COMPOSE_DIR)
 	sudo docker-compose exec -T web python manage.py compilemessages
