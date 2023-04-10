@@ -50,7 +50,7 @@ MIDDLEWARE = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'query_counter.middleware.DjangoQueryCounterMiddleware',
+    "query_counter.middleware.DjangoQueryCounterMiddleware",
 )
 
 ROOT_URLCONF = "foodgram_backend.urls"
