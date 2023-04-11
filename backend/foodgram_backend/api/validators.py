@@ -31,3 +31,21 @@ def validate_subscription(request, model_object, subscribed_object):
                 code=status.HTTP_404_NOT_FOUND,
             )
         return model_object
+
+
+def is_unique(items, item_name):
+    """
+    Проверяет уникальность введенных данных.
+    """
+
+    items_id_list = []
+    for item in items:
+        item_id = item
+        if isinstance(item, dict):
+            item_id = item.get("id")
+        if item_id in items_id_list:
+            raise ValidationError(
+                detail={"errors": f"{item_name} должны быть уникальные!"},
+                code=status.HTTP_400_BAD_REQUEST,
+            )
+        items_id_list.append(item_id)

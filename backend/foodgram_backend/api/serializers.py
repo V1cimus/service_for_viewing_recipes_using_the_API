@@ -6,7 +6,7 @@ from rest_framework import serializers, status
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ValidationError
 
-from .validators import validate_subscription
+from .validators import is_unique, validate_subscription
 from recipes.models import (
     BaseIngredient,
     Favorite,
@@ -446,11 +446,11 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         )
 
     def validate_tags(self, tags):
-        self.is_unique(tags, "Теги")
+        is_unique(tags, "Теги")
         return tags
 
     def validate_ingredients(self, ingredients):
-        self.is_unique(ingredients, "Ингредиенты")
+        is_unique(ingredients, "Ингредиенты")
         for ingredient in ingredients:
             if not BaseIngredient.objects.filter(
                     pk=ingredient.get("id")).exists():
@@ -464,19 +464,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                     code=status.HTTP_404_NOT_FOUND,
                 )
         return ingredients
-
-    def is_unique(self, items, item_name):
-        items_id_list = []
-        for item in items:
-            item_id = item
-            if isinstance(item, dict):
-                item_id = item.get("id")
-            if item_id in items_id_list:
-                raise ValidationError(
-                    detail={"errors": f"{item_name} должны быть уникальные!"},
-                    code=status.HTTP_400_BAD_REQUEST,
-                )
-            items_id_list.append(item_id)
 
     def create(self, validated_data):
         ingredients = validated_data.pop("ingredients")

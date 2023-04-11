@@ -12,7 +12,8 @@ exclude = [
     "migrations",
     "infra",
     "docs",
-    ".vscode"
+    ".vscode",
+    "tests",
 ]
 
 [tool.ruff.per-file-ignores]

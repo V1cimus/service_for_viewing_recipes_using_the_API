@@ -3,7 +3,7 @@ from django.db.models import F, Sum
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from query_counter.decorators import queries_counter
-from rest_framework import filters, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import (
@@ -12,7 +12,7 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 
-from .filter import RecipeFilter
+from .filter import BaseIngredientFilter, RecipeFilter
 from .permissions import (
     AuthorPermission,
     IsAdminOrReadOnlyPermission,
@@ -53,26 +53,12 @@ class BaseIngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     Поддерживает фильтрацию по названию ингредиента.
     """
 
+    queryset = BaseIngredient.objects.all()
     permission_classes = (IsAdminOrReadOnlyPermission,)
     pagination_class = None
     serializer_class = BaseIngredientSerializer
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ("name", )
-
-    def get_queryset(self):
-        queryset = BaseIngredient.objects.all()
-        name = self.request.query_params.get("name")
-        if name:
-            start_queryset = list(
-                queryset.filter(name__istartswith=name.lower())
-                )
-            all_queryset = list(queryset.filter(name__icontains=name.lower()))
-            for ingredient in all_queryset:
-                if ingredient in start_queryset:
-                    continue
-                start_queryset.append(ingredient)
-            queryset = start_queryset
-        return queryset
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = BaseIngredientFilter
 
 
 @method_decorator(queries_counter, name='dispatch')
