@@ -4,12 +4,43 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 ## Описание
-Проект предназначен для Публикации рецептов. Кроме того вы можете добавлять рецепты в избранное, фильтровать их то тегам, подписываться на авторов и формировать собственный список покупок на основании рецептов добавленых в него. 
+Проект предназначен для Публикации рецептов. Кроме того вы можете добавлять рецепты в избранное, фильтровать их то тегам, подписываться на авторов и формировать собственный список покупок на основании рецептов добавленных в него. 
 
+## Локальный запуск Backend.
+Для локального запуска приложения создайте файл .env в корне backend/.env, пример расположен в директорию /infra/.
+
+После создания файла выполните следующие команды.
+
+```bash
+python manage.py migrate
+```
+
+Наполните базу данных тестовыми данными.
+
+```bash
+python manage.py loaddata data/test_db_data.json
+```
+
+Создайте суперпользователя
+
+```bash
+python manage.py createsuperuser
+```
+
+Выполните команду для загрузки локализации, поддерживается русский и английский языки.
+
+```bash
+python manage.py compilemessages
+```
+
+Запустите сервер
+
+```bash
+python manage.py runserver
+```
 
 ## Шаблон наполнения env-файла.
 Для создания контейнера с БД необходимо поместить файл .env в директорию /infra/.env с наполнением соответствующем шаблону .env.example расположенным в той же директории.
-
 
 ## Запуск приложения в контейнерах.
 Для запуска приложения запустите докер и выполните команду для создания образов и контейнеров находясь в директории с файлом docker-compose.yaml.
@@ -33,17 +64,16 @@ docker-compose exec web python manage.py collectstatic --no-input
 Выполните команду для загрузки локализации, поддерживается русский и английский языки.
 
 ```bash
-sudo docker-compose exec -T web python manage.py compilemessages
+sudo docker-compose exec web python manage.py compilemessages
 ```
 
 Проект развернут и готов к работе!
 
 Для получения информации о доступных командах перейдите в документацию к API по ссылке: 
 - Docs: http://127.0.0.1/api/docs/;
-- Swagger: http://127.0.0.1/swagger/.
+- Swagger: http://127.0.0.1/api/swagger/.
 
-
-## Остановка проекта
+# Остановка проекта
 
 Выполните команду
 
@@ -51,8 +81,7 @@ sudo docker-compose exec -T web python manage.py compilemessages
 docker-compose down -v
 ```
 
-
-## Заполнение Базы Данных.
+# Заполнение Базы Данных.
 
 Создайте суперюзера.
 
@@ -66,4 +95,22 @@ winpty docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py load_csv_data
 ```
 
-ReadMe будет редактороваться по мере добавления проекта в облако.
+## Информация о боевом сервере в облаке.
+
+Боевой сервер развернут при помощи YandexCloud.
+
+Реализована технология автоматической загрузки изменений на сервер при помощи git action.
+Создан пре-хук коммит для линтера ruff. 
+Настроены файлы для диполя, такие как docker-compose.yml, nginx.conf, Makefile.
+
+Адреса боевого сервера:
+- http://vicimus-foodgram.sytes.net/;
+- http://158.160.61.84/.
+
+Документация доступна по следующим адресам:
+- Docs: http://vicimus-foodgram.sytes.net/api/docs/;
+- Swagger: http://vicimus-foodgram.sytes.net/api/swagger/.
+
+Данные для входа под админом:
+- Username: admin;
+- Password: admin.
