@@ -73,7 +73,7 @@ sudo docker-compose exec web python manage.py compilemessages
 - Docs: http://127.0.0.1/api/docs/;
 - Swagger: http://127.0.0.1/api/swagger/.
 
-# Остановка проекта
+### Остановка проекта
 
 Выполните команду
 
@@ -81,7 +81,7 @@ sudo docker-compose exec web python manage.py compilemessages
 docker-compose down -v
 ```
 
-# Заполнение Базы Данных.
+### Заполнение Базы Данных.
 
 Создайте суперюзера.
 
