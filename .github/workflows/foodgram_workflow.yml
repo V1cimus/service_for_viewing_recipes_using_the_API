@@ -65,6 +65,7 @@ jobs:
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
           echo DEBUG=${{ secrets.DEBUG }} >> .env
           echo DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
           make rm_web
           make up
           make migrate

@@ -23,3 +23,6 @@ collectstatic:
 
 localisation:
 	sudo docker-compose exec -T web python manage.py compilemessages
+
+restart:
+	sudo docker-compose restart
