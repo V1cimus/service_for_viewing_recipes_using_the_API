@@ -14,7 +14,7 @@ class User(AbstractUser):
     )
     email = models.EmailField(
         unique=True,
-        verbose_name="Email",
+        verbose_name=_("Email"),
     )
     is_user_ban = models.BooleanField(
         default=False,

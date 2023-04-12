@@ -6,7 +6,7 @@ from rest_framework import serializers, status
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ValidationError
 
-from .validators import is_unique, validate_subscription
+from .validators import is_unique, min_value_validator, validate_subscription
 from recipes.models import (
     BaseIngredient,
     Favorite,
@@ -445,6 +445,10 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             "cooking_time",
         )
 
+    def validate_cooking_time(self, cooking_time):
+        min_value_validator(cooking_time, "Время приготовления",)
+        return cooking_time
+
     def validate_tags(self, tags):
         is_unique(tags, "Теги")
         return tags
@@ -487,21 +491,22 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def get_ingredients_list_object(self, ingredients, recipe):
         exist_ingredients = recipe.ingredients.all()
         ingredients_as_object = []
+        for ingredient in exist_ingredients:
+            Ingredient.objects.get(
+                ingredient=ingredient, to_recipe=recipe).delete()
         for ingredient in ingredients:
             amount = ingredient.get("amount")
+            min_value_validator(amount, "Количество",)
             ingredient = BaseIngredient.objects.get(
                     pk=ingredient.get("id")
                 )
             ingredient_obj, _ = Ingredient.objects.get_or_create(
                 ingredient=ingredient,
                 to_recipe=recipe,
+                amount=amount,
             )
-            ingredient_obj.amount = amount
             ingredient_obj.save()
             ingredients_as_object.append(ingredient.id)
-        for ingredient in exist_ingredients:
-            if ingredient.id not in ingredients_as_object:
-                ingredient.delete()
         return ingredients_as_object
 
     def to_representation(self, instance):

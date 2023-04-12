@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import F, Sum
-from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from query_counter.decorators import queries_counter
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
@@ -28,14 +26,13 @@ from .serializers import (
     TagSerializer,
 )
 from .util import start_download_shopping_cart
-from .viewsets import CreateAndDectroyViewSet, GetAuthorSubViewSet
+from .viewsets import CreateAndDestroyViewSet, GetAuthorSubViewSet
 from recipes.models import BaseIngredient, Ingredient, Recipe, Tag
 from users.models import Subscription
 
 User = get_user_model()
 
 
-@method_decorator(queries_counter, name='dispatch')
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """
     ViewSet для просмотра списка тегов.
@@ -46,7 +43,6 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TagSerializer
 
 
-@method_decorator(queries_counter, name='dispatch')
 class BaseIngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Базовый ViewSet для просмотра списка ингредиентов.
@@ -61,7 +57,6 @@ class BaseIngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = BaseIngredientFilter
 
 
-@method_decorator(queries_counter, name='dispatch')
 class GetAuthorSubscriptionViewSet(GetAuthorSubViewSet):
     """
     ViewSet для просмотра подписок пользователя на авторов.
@@ -75,8 +70,7 @@ class GetAuthorSubscriptionViewSet(GetAuthorSubViewSet):
         return Subscription.objects.filter(user=self.request.user)
 
 
-@method_decorator(queries_counter, name='dispatch')
-class AuthorSubscriptionViewSet(CreateAndDectroyViewSet):
+class AuthorSubscriptionViewSet(CreateAndDestroyViewSet):
     """
     ViewSet для создания и удаления подписки пользователя на автора.
     """
@@ -96,7 +90,6 @@ class AuthorSubscriptionViewSet(CreateAndDectroyViewSet):
         return Subscription.objects.filter(user=self.request.user)
 
 
-@method_decorator(queries_counter, name='dispatch')
 class RecipeViewSet(viewsets.ModelViewSet):
     """
     ViewSet для модели создания, просмотра,
@@ -117,7 +110,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 IsAuthenticatedOrReadOnly(),
                 IsNotBanPermission(),
             )
-        elif self.request.method == "PATCH":
+        elif self.request.method in ("PATCH", "DELETE",):
             return (
                 AuthorPermission(),
                 IsNotBanPermission(),
@@ -138,9 +131,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     @action(
-        methods=["POST", "DELETE", ],
+        methods=("POST", "DELETE", ),
         detail=True,
         url_path="favorite",
+        permission_classes=(IsAuthenticated,),
     )
     def create_destroy_favorite(self, request, pk=None):
         serializer = FavoriteSerializer(
@@ -155,9 +149,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        methods=["POST", "DELETE", ],
+        methods=("POST", "DELETE", ),
         detail=True,
         url_path="shopping_cart",
+        permission_classes=(IsAuthenticated,),
     )
     def create_destroy_shopping_cart(self, request, pk=None):
         serializer = ShoppingListSerializer(
@@ -172,14 +167,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        methods=["GET", ],
+        methods=("GET", ),
         detail=False,
         url_path="download_shopping_cart",
+        permission_classes=(IsAuthenticated,),
     )
     def download_shopping_cart(self, request):
         user = request.user
-        if not user.is_authenticated:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
         ingredients_list = (
             Ingredient.objects.prefetch_related("ingredient").filter(
                 to_recipe__shoppinglist_subscribed_recipe__subscriber=user

@@ -10,6 +10,7 @@ User = get_user_model()
 class BaseIngredient(models.Model):
     name = models.CharField(
         max_length=64,
+        unique=True,
         verbose_name=_("Product Name"),
     )
     measurement_unit = models.CharField(
@@ -38,7 +39,6 @@ class Ingredient(models.Model):
         validators=(
             MinValueValidator(1),
         ),
-        default=1
     )
     to_recipe = models.ForeignKey(
         "Recipe",
@@ -100,11 +100,12 @@ class Recipe(models.Model):
         verbose_name=_("Recipe image"),
     )
     text = models.TextField(
-        max_length=256,
+        max_length=2048,
         verbose_name=_("Recipe Discription"),
     )
     ingredients = models.ManyToManyField(
         BaseIngredient,
+        through="Ingredient",
         verbose_name=_("Ingredients"),
     )
     tags = models.ManyToManyField(

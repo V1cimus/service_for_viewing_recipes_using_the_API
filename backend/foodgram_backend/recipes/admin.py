@@ -32,10 +32,11 @@ class RecipeAdmin(admin.ModelAdmin):
 @admin.register(BaseIngredient)
 class BaseIngredientAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "name",
         "measurement_unit",
     )
-    search_fields = ("name",)
+    search_fields = ("name", "id",)
     list_filter = ("name",)
     empty_value_display = "---пусто---"
 

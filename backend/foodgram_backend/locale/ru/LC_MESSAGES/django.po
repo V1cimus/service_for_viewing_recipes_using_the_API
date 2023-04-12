@@ -140,3 +140,7 @@ msgstr "Подписка"
 #: .\users\models.py:57
 msgid "Subscriptions"
 msgstr "Подписки"
+
+#: .\users\models.py:17
+msgid "Email"
+msgstr "Электронная почта"

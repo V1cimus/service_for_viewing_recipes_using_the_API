@@ -71,8 +71,8 @@ def start_download_shopping_cart(ingredients_list=None):
     """
     Функция start_download_shopping_cart генерирует PDF-файл
     со списком покупок на основе переданного списка ингредиентов,
-    сохраняет его в директории media и возвращает HTTP-ответ с
-    этим файлом во вложении.
+    сохраняет его в буфер и возвращает HTTP-ответ с
+    файлом во вложении.
     """
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer)

@@ -9,9 +9,9 @@ class GetAuthorSubViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
 
 
-class CreateAndDectroyViewSet(generics.DestroyAPIView,
+class CreateAndDestroyViewSet(generics.DestroyAPIView,
                               mixins.CreateModelMixin,
-                              viewsets.GenericViewSet):
+                              viewsets.GenericViewSet,):
     """
     ViewSet для создания и удаления объектов.
     Поддерживает методы POST и DELETE.

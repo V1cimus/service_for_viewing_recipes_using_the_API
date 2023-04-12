@@ -39,13 +39,26 @@ def is_unique(items, item_name):
     """
 
     items_id_list = []
+    if not items:
+        raise ValidationError(
+            f"Необходимы {item_name}, хотя бы один!",
+        )
     for item in items:
         item_id = item
         if isinstance(item, dict):
             item_id = item.get("id")
         if item_id in items_id_list:
             raise ValidationError(
-                detail={"errors": f"{item_name} должны быть уникальные!"},
-                code=status.HTTP_400_BAD_REQUEST,
+                f"{item_name} должны быть уникальные!",
             )
         items_id_list.append(item_id)
+
+
+def min_value_validator(value, item_name):
+    """
+    Проверяет введеное число на значение меньше 1.
+    """
+    if value < 1:
+        raise ValidationError(
+            f"{item_name} должно быть больше Нуля!",
+        )
