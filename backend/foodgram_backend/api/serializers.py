@@ -493,9 +493,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def get_ingredients_list_object(self, ingredients, recipe):
         exist_ingredients = recipe.ingredients.all()
         ingredients_as_object = []
-        for ingredient in exist_ingredients:
+        for exist_ingredient in exist_ingredients:
             Ingredient.objects.get(
-                ingredient=ingredient, to_recipe=recipe).delete()
+                ingredient=exist_ingredient, to_recipe=recipe).delete()
         for ingredient in ingredients:
             amount = ingredient.get("amount")
             ingredient = BaseIngredient.objects.get(
