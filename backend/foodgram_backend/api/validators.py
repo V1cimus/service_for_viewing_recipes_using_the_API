@@ -60,5 +60,5 @@ def min_value_validator(value, item_name):
     """
     if value < 1:
         raise ValidationError(
-            f"{item_name} должно быть больше Нуля!",
+            f"{item_name} должно быть больше 0!",
         )

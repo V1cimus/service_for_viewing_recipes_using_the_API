@@ -454,7 +454,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return tags
 
     def validate_ingredients(self, ingredients):
-        is_unique(ingredients, "Ингредиенты")
         for ingredient in ingredients:
             if not BaseIngredient.objects.filter(
                     pk=ingredient.get("id")).exists():
@@ -471,6 +470,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients = validated_data.pop("ingredients")
+        is_unique(ingredients, "Ингредиенты")
         tags = validated_data.pop("tags")
         for ingredient in ingredients:
             min_value_validator(ingredient.get("amount"), "Количество",)
