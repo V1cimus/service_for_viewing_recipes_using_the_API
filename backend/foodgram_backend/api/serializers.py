@@ -472,6 +472,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         ingredients = validated_data.pop("ingredients")
         tags = validated_data.pop("tags")
+        for ingredient in ingredients:
+            min_value_validator(ingredient.get("amount"), "Количество",)
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         recipe.ingredients.set(
@@ -496,7 +498,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 ingredient=ingredient, to_recipe=recipe).delete()
         for ingredient in ingredients:
             amount = ingredient.get("amount")
-            min_value_validator(amount, "Количество",)
             ingredient = BaseIngredient.objects.get(
                     pk=ingredient.get("id")
                 )
