@@ -22,7 +22,7 @@ collectstatic:
 	sudo docker-compose exec -T web python manage.py collectstatic --no-input
 
 localisation:
-	sudo docker-compose exec -T web python manage.py compilemessages
+	sudo docker-compose exec web python manage.py compilemessages
 
 restart:
 	sudo docker-compose restart
