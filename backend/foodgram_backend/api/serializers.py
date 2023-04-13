@@ -458,7 +458,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             id = ingredient.get("ingredient").get("id")
             amount = ingredient.get("amount")
-            min_value_validator(ingredient.get("amount"), "Количество",)
             if not BaseIngredient.objects.filter(pk=id).exists():
                 raise ValidationError(
                     detail={
@@ -479,6 +478,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
         is_unique(ingredients, "Ингредиенты")
+        self.validate_amount(ingredients)
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         recipe.ingredients.set(
@@ -490,6 +490,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
         is_unique(ingredients, "Ингредиенты")
+        self.validate_amount(ingredients)
         instance.tags.set(tags)
         instance.ingredients.set(
             self.get_ingredients_list_object(ingredients, instance)
@@ -519,6 +520,10 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             ingredient_obj.save()
             ingredients_as_object.append(ingredient.id)
         return ingredients_as_object
+
+    def validate_amount(self, ingredients):
+        for ingredient in ingredients:
+            min_value_validator(ingredient.get("amount"), "Количество",)
 
     def to_representation(self, instance):
         serializer = RecipeSerializer(instance, context=self.context)
