@@ -147,6 +147,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         required=False,
     )
     id = serializers.IntegerField(
+        source="ingredient.id",
         required=True,
     )
     amount = serializers.IntegerField(required=True,)
@@ -356,7 +357,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             "is_favorited",
             "is_in_shopping_cart",
             "text",
-            "id",
             "name",
             "image",
             "cooking_time",
@@ -454,9 +454,12 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return tags
 
     def validate_ingredients(self, ingredients):
+        new_ingredients = []
         for ingredient in ingredients:
-            if not BaseIngredient.objects.filter(
-                    pk=ingredient.get("id")).exists():
+            id = ingredient.get("ingredient").get("id")
+            amount = ingredient.get("amount")
+            min_value_validator(amount, "Количество",)
+            if not BaseIngredient.objects.filter(pk=id).exists():
                 raise ValidationError(
                     detail={
                         "errors": (
@@ -466,14 +469,16 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                     },
                     code=status.HTTP_404_NOT_FOUND,
                 )
-        return ingredients
+            new_ingredients.append({
+                "id": id,
+                "amount": amount,
+            })
+        return new_ingredients
 
     def create(self, validated_data):
+        tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
         is_unique(ingredients, "Ингредиенты")
-        tags = validated_data.pop("tags")
-        for ingredient in ingredients:
-            min_value_validator(ingredient.get("amount"), "Количество",)
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         recipe.ingredients.set(
@@ -484,6 +489,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         tags = validated_data.pop("tags")
         ingredients = validated_data.pop("ingredients")
+        is_unique(ingredients, "Ингредиенты")
         instance.tags.set(tags)
         instance.ingredients.set(
             self.get_ingredients_list_object(ingredients, instance)
