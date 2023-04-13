@@ -458,6 +458,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             id = ingredient.get("ingredient").get("id")
             amount = ingredient.get("amount")
+            min_value_validator(ingredient.get("amount"), "Количество",)
             if not BaseIngredient.objects.filter(pk=id).exists():
                 raise ValidationError(
                     detail={
@@ -500,7 +501,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         ingredients_as_object = []
         for ingredient in ingredients:
             amount = ingredient.get("amount")
-            min_value_validator(amount, "Количество",)
             ingredient = BaseIngredient.objects.get(
                     pk=ingredient.get("id")
                 )
