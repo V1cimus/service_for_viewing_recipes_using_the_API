@@ -1,6 +1,6 @@
 # Размести свои рецепты здесь!
 
-![example workflow](https://github.com/V1cimus/service-for-viewing-recipes-using-the-API/actions/workflows/foodgram_workflow.yml/badge.svg)
+![example workflow](https://github.com/V1cimus/service_for_viewing_recipes_using_the_API/actions/workflows/foodgram_workflow.yml/badge.svg)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 ## Описание
