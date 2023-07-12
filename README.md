@@ -1,4 +1,4 @@
-# FoodGram, размести свои рецепты здесь! (praktikum_diplom)
+# Размести свои рецепты здесь! (praktikum_diplom)
 
 ![example workflow](https://github.com/V1cimus/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
@@ -103,14 +103,17 @@ docker-compose exec web python manage.py load_csv_data
 Создан пре-хук коммит для линтера ruff. 
 Настроены файлы для диполя, такие как docker-compose.yml, nginx.conf, Makefile.
 
-Адреса боевого сервера:
-- http://vicimus-foodgram.sytes.net/;
-- http://158.160.61.84/.
+---
+Неактуальная информация:
 
-Документация доступна по следующим адресам:
-- Docs: http://vicimus-foodgram.sytes.net/api/docs/;
-- Swagger: http://vicimus-foodgram.sytes.net/api/swagger/.
+~~Адреса боевого сервера:~~ <br>
+~~- http://vicimus-foodgram.sytes.net/;~~ <br>
+~~- http://158.160.61.84/.~~ <br>
 
-Данные для входа под админом:
-- Username: admin;
-- Password: admin.
+~~Документация доступна по следующим адресам:~~ <br>
+~~- Docs: http://vicimus-foodgram.sytes.net/api/docs/;~~ <br>
+~~- Swagger: http://vicimus-foodgram.sytes.net/api/swagger/.~~ <br>
+
+~~Данные для входа под админом:~~ <br>
+~~- Username: admin;~~ <br>
+~~- Password: admin.~~ <br>
